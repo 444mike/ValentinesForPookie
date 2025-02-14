@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will You Be My Valentine?</title>
     <style>
+        #image-container {
+            position: fixed;
+            bottom: 20px; /* Position in the bottom corner */
+            right: 20px;
+            width: 450px; /* Adjust size */
+            height: 450px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #rotating-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Keeps aspect ratio */
+        }
+
         body {
             display: flex;
             flex-direction: column;
@@ -13,6 +30,8 @@
             height: 100vh;
             background-color: pink;
             font-family: Arial, sans-serif;
+            
+
         }
         h1 {
             color: red;
@@ -67,27 +86,134 @@
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-100px); opacity: 0; }
         }
+        .challenge-button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: #ff4d4d;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .challenge-button:hover {
+            background-color: #cc0000;
+        }
+        #timer-display {
+            font-size: 1.8em;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+
     </style>
 </head>
 <body>
-    <h1>Will You Be My Valentine? ❤️</h1>
+    <div id="image-container">
+        <img id="rotating-image" src="pookiepictures/IMG_0648.jpg" alt="Cute Image">
+    </div>
+    <h1>Will You Be My Valentine LeAnne? :3 ❤️</h1>
     <div class="buttons">
         <button class="yes" onclick="showLove()">Yes</button>
         <button class="no" onmouseover="moveNo()">No</button>
     </div>
     <div id="message" class="hidden">
-        <h1>Yay! I love you! ❤️💕</h1>
+        <h1>Yay! I love you :D ❤️💕</h1>
     </div>
     <div id="hearts"></div>
 
     <script>
+        const images = [
+            "pookiepictures/IMG_0648.jpg",
+            "pookiepictures/IMG_0651.jpg",
+            "pookiepictures/IMG_0656.jpg",
+            "pookiepictures/IMG_0657.jpg",
+            "pookiepictures/IMG_0667.jpg",
+            "pookiepictures/IMG_0714.jpg",
+            "pookiepictures/IMG_0715.jpg",
+            "pookiepictures/IMG_0757.jpg",
+            "pookiepictures/IMG_0829.jpg",
+            "pookiepictures/IMG_0830.jpg",
+            "pookiepictures/IMG_0928.jpg",
+            "pookiepictures/IMG_0929.jpg",
+            "pookiepictures/IMG_0943.jpg",
+            "pookiepictures/IMG_0944.jpg",
+            "pookiepictures/IMG_0950.jpg",
+            "pookiepictures/IMG_0951.jpg",
+            "pookiepictures/IMG_0952.jpg",
+            "pookiepictures/IMG_0953.jpg",
+            "pookiepictures/IMG_0954.jpg",
+            "pookiepictures/IMG_0955.jpg",
+            "pookiepictures/IMG_0956.jpg",
+            "pookiepictures/IMG_0977.jpg",
+            "pookiepictures/IMG_0978.jpg",
+            "pookiepictures/IMG_0982.jpg",
+            "pookiepictures/IMG_0983.jpg",
+            "pookiepictures/IMG_0984.jpg",
+            "pookiepictures/IMG_1056.jpg",
+            "pookiepictures/IMG_1057.jpg",
+            "pookiepictures/IMG_1058.jpg",
+            "pookiepictures/IMG_1103.jpg",
+            "pookiepictures/IMG_1881.jpg",
+            "pookiepictures/IMG_2711.jpg",
+            "pookiepictures/IMG_6383.jpg",
+            "pookiepictures/IMG_6388.jpg",
+            "pookiepictures/IMG_6389.jpg",
+            "pookiepictures/IMG_6390.jpg",
+            "pookiepictures/IMG_6391.jpg",
+            "pookiepictures/IMG_6393.jpg",
+            "pookiepictures/IMG_6394.jpg",
+            "pookiepictures/IMG_6397.jpg",
+            "pookiepictures/IMG_6398.jpg",
+            "pookiepictures/IMG_6399.jpg",
+            "pookiepictures/IMG_6400.jpg",
+            "pookiepictures/IMG_6401.jpg",
+            "pookiepictures/IMG_6402.jpg"
+        ]; // Add more images if needed
+
+        const imgElement = document.getElementById("rotating-image");
+
+        // Function to get a random image index that is NOT the current one
+        function getRandomImageIndex(excludeIndex) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * images.length);
+            } while (randomIndex === excludeIndex); // Ensures it doesn't repeat the same image
+
+            return randomIndex;
+        }
+
+        // Start with a random image
+        let currentImageIndex = getRandomImageIndex(-1);
+        imgElement.src = images[currentImageIndex];
+
+        function cycleImages() {
+            currentImageIndex = getRandomImageIndex(currentImageIndex);
+            imgElement.src = images[currentImageIndex];
+        }
+
+        // Change image every 5 seconds
+        setInterval(cycleImages, 1000);
+
+
         function moveNo() {
             let button = document.querySelector('.no');
-            let x = Math.random() * (window.innerWidth - 100);
-            let y = Math.random() * (window.innerHeight - 50);
+            let buttonWidth = button.offsetWidth;
+            let buttonHeight = button.offsetHeight;
+
+            let maxX = window.innerWidth - buttonWidth - 20; // Prevent overflow on the right
+            let maxY = window.innerHeight - buttonHeight - 20; // Prevent overflow on the bottom
+
+            let x = Math.random() * maxX;  // Random X within bounds
+            let y = Math.random() * maxY;  // Random Y within bounds
+
+            // Apply new position
+            button.style.position = "absolute";
             button.style.left = `${x}px`;
             button.style.top = `${y}px`;
         }
+
 
         function showLove() {
             document.querySelector('.buttons').classList.add('hidden');
@@ -106,6 +232,86 @@
                 setTimeout(() => heart.remove(), 2000);
             }
         }
+
+        let clickCount = 0;
+        let timeLeft = 10.0;
+        let timer;
+        let challengeActive = false;
+        let timerStarted = false;
+
+        function startChallenge() {
+            clickCount = 0; // Reset click count
+            timeLeft = 10.0; // Reset time
+            timerStarted = false;
+            challengeActive = true;
+
+            document.getElementById("message").innerHTML = `
+                <h1>SHOW ME THAT YOU LOVE ME >:)))</h1>
+                <h1>Click the button 50 times in 10 seconds!</h1>
+                <h2 id="timer-display">Time left: ${timeLeft.toFixed(1)}s</h2>
+                <h2 id="click-counter">Clicks: ${clickCount} / 50</h2>
+            `;
+
+            // Create the challenge button
+            let challengeBtn = document.createElement("button");
+            challengeBtn.innerText = "Click Me!";
+            challengeBtn.classList.add("challenge-button");
+            challengeBtn.onclick = countClicks;
+            document.getElementById("message").appendChild(challengeBtn);
+        }
+
+        function countClicks() {
+            if (!challengeActive) return;
+            
+            clickCount++;
+
+            // Update click counter
+            let clickCounter = document.getElementById("click-counter");
+            if (clickCounter) {
+                clickCounter.innerText = `Clicks: ${clickCount} / 50`;
+            }
+
+            // Start the timer only on the first click
+            if (!timerStarted) {
+                timerStarted = true;
+                timer = setInterval(updateTimer, 100);
+            }
+            
+            if (clickCount >= 50) {
+                clearInterval(timer);
+                challengeActive = false;
+                document.getElementById("message").innerHTML = "<h1>You did it! I love you ❤️</h1>";
+            }
+        }
+
+        function updateTimer() {
+            if (!timerStarted) return;
+
+            timeLeft -= 0.1;
+
+            let timerDisplay = document.getElementById("timer-display");
+            if (timerDisplay) {
+                timerDisplay.innerText = `Time left: ${timeLeft.toFixed(1)}s`;
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                challengeActive = false;
+                document.getElementById("message").innerHTML = `
+                    <h1>Oh no! Time's up! ⏳</h1>
+                    <button onclick="startChallenge()">Retry</button>
+                `;
+            }
+        }
+
+        function showLove() {
+            document.querySelector('.buttons').classList.add('hidden');
+            document.getElementById('message').classList.remove('hidden');
+            
+            setTimeout(startChallenge, 1000); // Start the challenge after 1 second
+        }
+
+
     </script>
 </body>
 </html>
